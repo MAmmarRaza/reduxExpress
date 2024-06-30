@@ -76,16 +76,51 @@ const login=async (req, res) => {
 const getusers=async(req,res)=>{
     try {
         const users = await User.find().select('-password');
-        res.status(200).json(users);
+        res.status(200).json({message:"data shown",users});
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }   
 
+const updateUser=async(req,res)=>{
+    try {
+        const {email, name}=req.body;
+        const candidate=await User.findOne({email});
+        if(!candidate){
+            return res.status(400).json({message:"User Doesn't Exist!"});
+        }
+        await User.findOneAndUpdate({email},{name:name});
+        res.status(200).json({message:"User Updated!"});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+const deleteUser=async(req,res)=>{
+    try {
+        const {email}=req.body;
+        const candidate=await User.findOne({email});
+        if(!candidate){
+            return res.status(400).json({message:"User Doesn't Exist!"});
+        }
+        await User.findOneAndDelete({email});
+        res.status(200).json({message:"User Deleted!"});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+
 
 module.exports = {
     login,
     signup,
-    getusers
+    getusers,
+    updateUser,
+    deleteUser
 };

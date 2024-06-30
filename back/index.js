@@ -28,6 +28,7 @@ db.once('open', () => {
 
 // Define a simple route
 app.use("/auth", require('./Routes/AuthRoute'));
+app.use("/test", require('./Routes/TestRoute'));
 
 // Start the server
 const PORT = process.env.PORT || 4000;
